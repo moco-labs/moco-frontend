@@ -63,11 +63,6 @@ spec:
                     echo "Current branch: ${env.BRANCH_NAME}"
                     echo "Version: ${VERSION}"
                     echo "Docker image: ${DOCKER_HUB_IMAGE}:${VERSION}"
-                    
-                    // Set deployment conditions
-                    def allowedBranches = ['main', 'develop']
-                    env.DEPLOY_ALLOWED = allowedBranches.contains(env.BRANCH_NAME) ? 'true' : 'false'
-                    echo "Deployment allowed for this branch: ${env.DEPLOY_ALLOWED}"
                 }
             }
         }
@@ -130,11 +125,10 @@ spec:
                 script {
                     echo "=== Deploy Condition Check ==="
                     echo "PERFORM_DEPLOYMENT: ${params.PERFORM_DEPLOYMENT}"
-                    echo "DEPLOY_ALLOWED: ${env.DEPLOY_ALLOWED}"
                     echo "Current Branch: ${env.BRANCH_NAME}"
                     echo "Environment: ${params.ENVIRONMENT}"
                     
-                    def shouldDeploy = params.PERFORM_DEPLOYMENT == true && env.DEPLOY_ALLOWED == 'true'
+                    def shouldDeploy = params.PERFORM_DEPLOYMENT == true
                     echo "Should deploy: ${shouldDeploy}"
                     env.SHOULD_DEPLOY = shouldDeploy ? 'true' : 'false'
                 }
@@ -144,7 +138,7 @@ spec:
         stage('Deploy to Kubernetes') {
             when {
                 expression { 
-                    params.PERFORM_DEPLOYMENT == true && env.DEPLOY_ALLOWED == 'true'
+                    params.PERFORM_DEPLOYMENT == true
                 }
             }
             stages {
