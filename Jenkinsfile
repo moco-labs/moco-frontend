@@ -112,19 +112,12 @@ spec:
                             passwordVariable: 'DOCKER_HUB_PASSWORD'
                         )]) {
                             sh """
-                                echo "Building Docker image..."
-                                docker build -t ${DOCKER_HUB_IMAGE}:${VERSION} .
-                                docker tag ${DOCKER_HUB_IMAGE}:${VERSION} ${DOCKER_HUB_IMAGE}:latest
-                                
                                 echo "Logging into Docker Hub..."
                                 echo "${DOCKER_HUB_PASSWORD}" | docker login -u "${DOCKER_HUB_USERNAME}" --password-stdin
                                 
-                                echo "Pushing Docker images..."
-                                docker push ${DOCKER_HUB_IMAGE}:${VERSION}
-                                docker push ${DOCKER_HUB_IMAGE}:latest
-                                
-                                echo "Cleaning up local images..."
-                                docker rmi ${DOCKER_HUB_IMAGE}:${VERSION} ${DOCKER_HUB_IMAGE}:latest || true
+                                echo "Building and pushing multi-platform Docker image..."
+                                docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_HUB_IMAGE}:${VERSION} --push .
+                                docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_HUB_IMAGE}:latest --push .
                             """
                         }
                     }
