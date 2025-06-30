@@ -224,9 +224,6 @@ spec:
                 echo "Environment: ${params.ENVIRONMENT}"
                 echo "Deployment performed: ${env.SHOULD_DEPLOY ?: 'false'}"
             }
-            
-            // Clean up workspace
-            cleanWs()
         }
         success {
             script {
