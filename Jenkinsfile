@@ -29,6 +29,18 @@ spec:
       limits:
         memory: "2Gi"
         cpu: "1"
+  - name: git
+    image: alpine/git:latest
+    command:
+    - cat
+    tty: true
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "0.1"
+      limits:
+        memory: "512Mi"
+        cpu: "0.5"
 """
         }
     }
@@ -157,7 +169,7 @@ spec:
                 
                 stage('Update Helm Values') {
                     steps {
-                        container('node') {
+                        container('git') {
                             withCredentials([usernamePassword(
                                 credentialsId: 'git-credential', 
                                 usernameVariable: 'GIT_USERNAME', 
