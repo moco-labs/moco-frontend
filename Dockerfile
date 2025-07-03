@@ -16,14 +16,8 @@ FROM nginx:alpine AS runtime
 
 COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN mkdir -p /tmp/nginx/client_temp \
-    /tmp/nginx/proxy_temp \
-    /tmp/nginx/fastcgi_temp \
-    /tmp/nginx/uwsgi_temp \
-    /tmp/nginx/scgi_temp
-
 COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 8080
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

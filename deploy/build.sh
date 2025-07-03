@@ -8,11 +8,11 @@ fi
 DOCKER_REGISTRY=${DOCKER_REGISTRY:-"webdev0594"}
 IMAGE_TAG=${IMAGE_TAG:-$(git rev-parse --short HEAD)}
 
-echo "Building image: ${DOCKER_REGISTRY}/chatalgo:${IMAGE_TAG}"
+echo "Building image: ${DOCKER_REGISTRY}/moco-frontend:${IMAGE_TAG}"
 
-docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_REGISTRY}/chatalgo:${IMAGE_TAG} --push .
+docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_REGISTRY}/moco-frontend:${IMAGE_TAG} --push .
 
-echo "Image successfully built and pushed: ${DOCKER_REGISTRY}/chatalgo:${IMAGE_TAG}"
+echo "Image successfully built and pushed: ${DOCKER_REGISTRY}/moco-frontend:${IMAGE_TAG}"
 
 echo "Generating deployment manifest..."
 cat deploy/deployment.yaml | \
