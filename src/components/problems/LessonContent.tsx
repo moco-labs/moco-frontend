@@ -11,75 +11,6 @@ interface LessonContentProps {
   challengeId: string;
 }
 
-interface LessonSectionProps {
-  id: string;
-  title: string;
-  children: React.ReactNode;
-  className?: string;
-}
-
-interface LessonKeyPointsProps {
-  id: string;
-  title: string;
-  points: Array<{
-    title: string;
-    description: string;
-  }>;
-}
-
-interface LessonCodeExampleProps {
-  id: string;
-  title: string;
-  code: string;
-}
-
-function LessonSectionComponent({
-  id,
-  title,
-  children,
-  className = "",
-}: LessonSectionProps) {
-  return (
-    <section className={`mb-8 ${className}`} aria-labelledby={id}>
-      <h2 id={id} className="text-xl font-medium text-[#333] mb-4">
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
-
-function LessonKeyPoints({ id, title, points }: LessonKeyPointsProps) {
-  return (
-    <div className="bg-[#f8f3e7] p-4 rounded-lg border border-[#e6d7b8]">
-      <h3 id={id} className="text-lg font-medium text-[#c28b3b] mb-2">
-        {title}
-      </h3>
-      <ul className="list-disc pl-5 space-y-2 text-[#666] text-base">
-        {points.map((point, idx) => (
-          <li key={`${id}-point-${idx}`}>
-            <strong>{point.title}</strong> {point.description}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function LessonCodeExample({ id, title, code }: LessonCodeExampleProps) {
-  return (
-    <section
-      className="bg-black text-white p-4 rounded-lg mb-8"
-      aria-labelledby={id}
-    >
-      <h3 id={id} className="text-lg font-medium mb-2">
-        {title}
-      </h3>
-      <pre className="text-base font-mono overflow-x-auto">{code}</pre>
-    </section>
-  );
-}
-
 function LessonSkeleton() {
   return (
     <div className="space-y-8 animate-pulse">
@@ -137,12 +68,14 @@ export function LessonContent({ onClose, challengeId }: LessonContentProps) {
   }, []);
 
   const currentLesson =
-    lessons && lessons.length > 0 ? lessons[currentLessonIndex] : null;
+    lessons && lessons.content.length > 0
+      ? lessons.content[currentLessonIndex]
+      : null;
   const sections = currentLesson?.sections || [];
   const currentSection =
     sections.length > 0 ? sections[currentSectionIndex] : null;
 
-  const totalLessons = lessons?.length || 0;
+  const totalLessons = lessons?.content.length || 0;
   const totalSections = sections.length;
 
   const handleNextSection = () => {
@@ -158,7 +91,7 @@ export function LessonContent({ onClose, challengeId }: LessonContentProps) {
       setCurrentSectionIndex(currentSectionIndex - 1);
     } else if (currentLessonIndex > 0) {
       setCurrentLessonIndex(currentLessonIndex - 1);
-      const prevLesson = lessons?.[currentLessonIndex - 1];
+      const prevLesson = lessons?.content[currentLessonIndex - 1];
       if (prevLesson) {
         setCurrentSectionIndex(prevLesson.sections.length - 1);
       }

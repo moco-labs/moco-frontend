@@ -112,12 +112,16 @@ export type LessonSection =
   | LessonGapFillSection
   | LessonImplementationSection;
 
-export interface LessonResponse {
+interface LessonItem {
   id: string;
   challengeId: string;
   sections: LessonSection[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface LessonResponse {
+  content: LessonItem[];
 }
 
 export const challengesApi = {
@@ -126,7 +130,7 @@ export const challengesApi = {
    * @param challengeId - The challenge ID
    * @returns A promise that resolves to the lessons for the challenge
    */
-  getLessons: async (challengeId: string): Promise<LessonResponse[]> => {
+  getLessons: async (challengeId: string): Promise<LessonResponse> => {
     try {
       const response = await fetch(
         `${API_BASE_URL}/lessons?challengeId=${challengeId}`,
@@ -135,12 +139,12 @@ export const challengesApi = {
           headers: {
             Accept: "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch lessons with status: ${response.status}`,
+          `Failed to fetch lessons with status: ${response.status}`
         );
       }
 
@@ -167,7 +171,7 @@ export const challengesApi = {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch challenge with status: ${response.status}`,
+          `Failed to fetch challenge with status: ${response.status}`
         );
       }
 
@@ -186,7 +190,7 @@ export const challengesApi = {
    */
   getChatSession: async (
     challengeId: string,
-    token: string,
+    token: string
   ): Promise<ChatSessionResponse> => {
     try {
       const response = await fetch(
@@ -197,12 +201,12 @@ export const challengesApi = {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch chat session with status: ${response.status}`,
+          `Failed to fetch chat session with status: ${response.status}`
         );
       }
 
@@ -223,7 +227,7 @@ export const challengesApi = {
   sendChatMessage: async (
     challengeId: string,
     message: string,
-    token: string,
+    token: string
   ): Promise<ChatSessionResponse> => {
     try {
       const response = await fetch(
@@ -236,12 +240,12 @@ export const challengesApi = {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ message }),
-        },
+        }
       );
 
       if (!response.ok) {
         throw new Error(
-          `Failed to send chat message with status: ${response.status}`,
+          `Failed to send chat message with status: ${response.status}`
         );
       }
 
@@ -266,7 +270,7 @@ export const challengesApi = {
     size = 10,
     search?: string,
     difficulty?: string,
-    tag?: string,
+    tag?: string
   ): Promise<ChallengesListResponse> => {
     try {
       const params = new URLSearchParams();
@@ -292,12 +296,12 @@ export const challengesApi = {
           headers: {
             Accept: "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch challenges with status: ${response.status}`,
+          `Failed to fetch challenges with status: ${response.status}`
         );
       }
 

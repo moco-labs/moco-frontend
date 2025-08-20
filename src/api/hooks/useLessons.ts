@@ -7,7 +7,7 @@ import { type LessonResponse, challengesApi } from "../challenges";
  * @returns A query object with lessons data
  */
 export function useLessons(challengeId: string) {
-  return useQuery<LessonResponse[], Error>({
+  return useQuery<LessonResponse, Error>({
     queryKey: ["lessons", challengeId],
     queryFn: () => challengesApi.getLessons(challengeId),
     enabled: !!challengeId,
